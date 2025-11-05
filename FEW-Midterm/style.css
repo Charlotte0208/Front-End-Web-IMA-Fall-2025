@@ -119,9 +119,14 @@ body{
 .cluster.free{position:relative;height:clamp(420px,50vw,600px)}
 
 .bubble{
-  --size:140px;--hue:260;--x:0;--y:0;
+  --base: clamp(240px, 12vw, 400px);
+  --scale: 1;
+  width: calc(var(--base) * var(--scale));
+  height: calc(var(--base) * var(--scale));
+  aspect-ratio: 1 / 1;
+  --hue:260;--x:0;--y:0;
   overflow:hidden;position:absolute;left:50%;top:50%;
-  width:var(--size);height:var(--size);border-radius:999px;
+  border-radius:999px;
   display:grid;place-items:center;text-decoration:none;
   transform:translate(calc(-50% + var(--x)), calc(-50% + var(--y)));
   background:hsla(var(--hue),30%,70%,.8);
