@@ -191,3 +191,5 @@ body{
 @media (prefers-reduced-motion:reduce){
   .float1,.float2,.float3{animation:none}
 }
+@media (max-width: 900px){ .bubble { --base: clamp(200px, 16vw, 320px); } }
+@media (max-width: 640px){ .bubble { --base: clamp(160px, 22vw, 260px); } }
