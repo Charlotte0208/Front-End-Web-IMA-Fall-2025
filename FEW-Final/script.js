@@ -1,13 +1,14 @@
 const gameContainer = document.getElementById('game-container');
 const genreContainer = document.getElementById('genre-container');
+const accomplishmentContainer = document.getElementById('accomplishment-container');
 
 const genreDescriptions = {
     "Action": "Adrenaline and fast reflexes.",
-    "RPG": "Living another life, another story.",
+    "RPG": "Living another life.",
     "Indie": "Small teams, giant souls.",
     "Strategy": "Planning the perfect victory.",
     "Adventure": "Exploring the unknown.",
-    "Simulation": "Mimicking reality, but better.",
+    "Simulation": "Mimicking reality.",
     "Casual": "Relaxing vibes only.",
     "Puzzle": "Brain teasers and logic.",
     "Story Rich": "Narratives that touch the heart.",
@@ -20,10 +21,6 @@ function formatTime(minutes) {
     return `${(minutes / 60).toFixed(1)} hrs`;
 }
 
-function getGenreDesc(name) {
-    return genreDescriptions[name] || `Exploring the world of ${name}.`;
-}
-
 async function initGarden() {
     try {
         const response = await fetch('/api/steam');
@@ -32,6 +29,7 @@ async function initGarden() {
         const data = await response.json();
         const games = data.games;
         const genres = data.genres;
+        const achievements = data.achievements;
         
         if (!games || games.length === 0) return;
 
@@ -45,7 +43,6 @@ async function initGarden() {
             bubble.href = `https://store.steampowered.com/app/${game.appid}`;
             bubble.target = "_blank";
             bubble.className = 'bubble game-bubble';
-            
             bubble.classList.add(Math.random() > 0.5 ? 'float1' : 'float2');
 
             let scale = minGameScale;
@@ -102,7 +99,8 @@ async function initGarden() {
                 bubble.style.animationDelay = `${delay}s`;
                 bubble.classList.add('float3');
 
-                bubble.setAttribute('data-info', getGenreDesc(g.name));
+                const desc = genreDescriptions[g.name] || g.name;
+                bubble.setAttribute('data-info', desc);
 
                 if (g.sampleAppId) {
                     const bgUrl = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${g.sampleAppId}/header.jpg`;
@@ -110,8 +108,40 @@ async function initGarden() {
                 }
 
                 bubble.innerHTML = `<span class="genre-text">${g.name}</span>`;
-
                 genreContainer.appendChild(bubble);
+            });
+        }
+
+
+        if (achievements && achievements.length > 0) {
+            accomplishmentContainer.innerHTML = '';
+            
+            achievements.forEach((ach) => {
+                const bubble = document.createElement('a');
+                bubble.href = `https://steamcommunity.com/stats/${ach.appid}/achievements`;
+                bubble.target = "_blank";
+                bubble.className = 'bubble achievement-bubble';
+
+
+                const scale = 1.0 + ((ach.percentage / 100) * 0.8);
+                
+                const xVal = (Math.random() * 50) - 25;
+                const yVal = (Math.random() * 30) - 15;
+                const delay = -(Math.random() * 10);
+
+                bubble.style.setProperty('--scale', scale.toFixed(2));
+                bubble.style.setProperty('--x', `${xVal}vw`);
+                bubble.style.setProperty('--y', `${yVal}vh`);
+                bubble.style.animationDelay = `${delay}s`;
+                bubble.classList.add('float1');
+
+                bubble.setAttribute('data-info', `${ach.name}`);
+
+                const bgUrl = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${ach.appid}/header.jpg`;
+                bubble.style.backgroundImage = `url(${bgUrl})`;
+
+                bubble.innerHTML = `<span class="achievement-text">${ach.percentage}%</span>`;
+                accomplishmentContainer.appendChild(bubble);
             });
         }
 

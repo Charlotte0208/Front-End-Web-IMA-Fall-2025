@@ -92,7 +92,7 @@ body{
 
 .cluster.compact {
     position: relative;
-    height: 400px; /* Increased height for bigger bubbles */
+    height: 400px;
     width: 100%;
 }
 
@@ -149,12 +149,9 @@ body{
 
 .bubble:hover img{ opacity:1; transform:scale(1.05); }
 
-/* Genre Bubble Styles - BRIGHTER VERSION */
 .genre-bubble {
-    border: 3px solid #d6b3ff; /* Lighter Purple Border */
-    /* Remove 'multiply' to make it brighter */
+    border: 3px solid #d6b3ff;
     background-blend-mode: normal; 
-    /* Use a lighter purple overlay */
     background-color: rgba(80, 40, 120, 0.3);
 }
 
@@ -164,7 +161,7 @@ body{
 }
 
 .genre-text {
-    font-size: 10px; /* Slightly bigger text */
+    font-size: 10px;
     color: white;
     text-align: center;
     text-shadow: 0 2px 4px black;
@@ -174,6 +171,26 @@ body{
     pointer-events: none;
     z-index: 2;
     border: 1px solid rgba(255,255,255,0.2);
+}
+
+.achievement-bubble {
+    border: 3px solid #ffd700;
+    background-blend-mode: normal;
+    background-color: rgba(60, 40, 0, 0.3);
+}
+
+.achievement-bubble:hover {
+    border-color: #fff;
+    box-shadow: 0 0 30px #ffd700;
+}
+
+.achievement-text {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffd700;
+    text-shadow: 2px 2px 0 #000;
+    z-index: 2;
+    pointer-events: none;
 }
 
 .bubble::after {
