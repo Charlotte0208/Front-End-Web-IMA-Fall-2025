@@ -22,8 +22,8 @@ async function initGarden() {
         }
 
         let maxPlaytime = Math.max(...games.map(g => g.playtime_forever)) || 1;
-        const minGameScale = 0.7;
-        const maxGameScale = 2.0;
+        const minGameScale = 0.8;
+        const maxGameScale = 2.2;
 
         games.forEach(game => {
             const bubble = document.createElement('a');
@@ -40,8 +40,8 @@ async function initGarden() {
                 scale = minGameScale + (ratio * (maxGameScale - minGameScale));
             }
             
-            const xVal = (Math.random() * 90) - 45;
-            const yVal = (Math.random() * 70) - 35;
+            const xVal = (Math.random() * 60) - 30;
+            const yVal = (Math.random() * 50) - 25;
             const hue = Math.floor(Math.random() * 360);
             const delay = -(Math.random() * 15);
 
@@ -76,11 +76,11 @@ async function initGarden() {
                 bubble.className = 'bubble genre-bubble';
 
                 const ratio = g.count / maxCount;
-                const scale = 0.6 + (ratio * 0.7);
+                const scale = 0.7 + (ratio * 0.6);
                 
-                const xVal = (Math.random() * 60) - 30;
+                const xVal = (Math.random() * 50) - 25;
                 const yVal = (Math.random() * 40) - 20;
-                const hue = 260 + (Math.random() * 40); 
+                const hue = 250 + (Math.random() * 50); 
 
                 bubble.style.setProperty('--scale', scale.toFixed(2));
                 bubble.style.setProperty('--x', `${xVal}vw`);
@@ -90,13 +90,13 @@ async function initGarden() {
 
                 bubble.setAttribute('data-info', `${g.name} (${g.count} games)`);
                 
-                bubble.innerHTML = `<span style="font-size: 8px; color: white; text-align: center; pointer-events: none;">${g.name}</span>`;
+                bubble.innerHTML = `<span style="font-size: 8px; color: white; text-align: center; pointer-events: none; padding:2px;">${g.name}</span>`;
 
                 genreContainer.appendChild(bubble);
             });
         } else {
              if (genreContainer) {
-                 genreContainer.innerHTML = '<p style="text-align:center; font-size:10px; color:#aaa;">(Genres loading skipped or not available)</p>';
+                 genreContainer.innerHTML = '<p style="text-align:center; font-size:10px; color:#aaa; margin-top:50px;">(Genres unavailable due to Steam restrictions)</p>';
              }
         }
 

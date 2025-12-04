@@ -12,35 +12,38 @@ export default async function handler(req, res) {
     let games = data.response.games || [];
 
     games.sort((a, b) => b.playtime_forever - a.playtime_forever);
-    const topGames = games.slice(0, 15);
+    const topGames = games.slice(0, 5);
     
-
     const appIds = topGames.map(g => g.appid).join(',');
     const storeUrl = `https://store.steampowered.com/api/appdetails?appids=${appIds}&filters=genres`;
 
     let genreCounts = {};
 
     try {
-        const storeResponse = await fetch(storeUrl);
-        const storeData = await storeResponse.json();
-
-
-        for (const appId in storeData) {
-            if (storeData[appId].success && storeData[appId].data && storeData[appId].data.genres) {
-                const genres = storeData[appId].data.genres;
-                genres.forEach(g => {
-                    const name = g.description;
-                    if (genreCounts[name]) {
-                        genreCounts[name]++;
-                    } else {
-                        genreCounts[name] = 1;
-                    }
-                });
+        const storeResponse = await fetch(storeUrl, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+        });
+        
+        if (storeResponse.ok) {
+            const storeData = await storeResponse.json();
+            for (const appId in storeData) {
+                if (storeData[appId].success && storeData[appId].data && storeData[appId].data.genres) {
+                    const genres = storeData[appId].data.genres; 
+                    genres.forEach(g => {
+                        const name = g.description;
+                        if (genreCounts[name]) {
+                            genreCounts[name]++;
+                        } else {
+                            genreCounts[name] = 1;
+                        }
+                    });
+                }
             }
         }
     } catch (storeError) {
         console.error("Genre fetch failed:", storeError);
-
     }
 
     const sortedGenres = Object.entries(genreCounts)
