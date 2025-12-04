@@ -54,18 +54,14 @@ body{
   mix-blend-mode:var(--grid-blend);
 }
 
-/* --- UPDATED: Circuit Overlay (Brighter & Screen Mode) --- */
 .bg-circuit-overlay {
     position: absolute; inset: 0; z-index: -1;
-    /* Increased stroke width and brightness in SVG */
     background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10h80v80h-80z' fill='none' stroke='rgba(150,230,255,0.4)' stroke-width='2'/%3E%3Cpath d='M30 10v20h-20M70 10v20h20M30 90v-20h-20M70 90v-20h20M10 30h20v-20M90 30h-20v-20M10 70h20v20M90 70h-20v20' fill='none' stroke='rgba(200,150,255,0.5)' stroke-width='2'/%3E%3C/svg%3E");
     background-size: 300px 300px;
-    opacity: 0.5;
-    /* Screen mode makes it glow on dark backgrounds */
+    opacity: 0.2;
     mix-blend-mode: screen; 
 }
 
-/* --- UPDATED: Scanlines (Higher Contrast) --- */
 .bg-scanlines {
     position: absolute; inset: 0; z-index: 1;
     background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.4) 50%), linear-gradient(90deg, rgba(255,0,0,0.08), rgba(0,255,0,0.04), rgba(0,0,255,0.08));
@@ -136,7 +132,6 @@ body{
 .section{margin:60px 0; position: relative;}
 
 .cluster.free{ position:relative; height:clamp(500px, 70vh, 800px); width:100%; display: block; }
-/* INCREASED HEIGHT FOR COLLISION DETECTION */
 .cluster.compact { position: relative; height: 500px; width: 100%; }
 
 .pixel-subtitle {
