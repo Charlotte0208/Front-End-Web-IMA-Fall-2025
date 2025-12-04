@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     let games = data.response.games || [];
 
     games.sort((a, b) => b.playtime_forever - a.playtime_forever);
-    const topGames = games.slice(0, 15);
+    const topGames = games.slice(0, 30);
 
     const fetchGenres = async () => {
         let genreCounts = {};
