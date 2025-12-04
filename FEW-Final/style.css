@@ -4,7 +4,7 @@
   --bg-deep:#1a0d2e;
   --text:#e6ccff;
   --bg-top-r:109; --bg-top-g:83; --bg-top-b:129;
-  --bg-img-opacity:.80; --bg-img-fade:90%;
+  --bg-img-opacity:.80; --bg-img-fade:100%;
   --grid-alpha:.06; --grid-size:56px; --grid-blend:soft-light;
 }
 
@@ -98,8 +98,8 @@ body{
 
 @keyframes floatUp {
     0% { transform: translateY(0) scale(0.8); opacity: 0; }
-    10% { opacity: 0.6; }
-    90% { opacity: 0.4; }
+    10% { opacity: 0.9; }
+    90% { opacity: 0.6; }
     100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
 }
 
