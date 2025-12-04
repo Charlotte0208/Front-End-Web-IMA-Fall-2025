@@ -35,14 +35,14 @@ function formatTime(minutes) {
 }
 
 function initBackgroundBubbles() {
-    const bubbleCount = 15;
+    const bubbleCount = 18;
     for (let i = 0; i < bubbleCount; i++) {
         const bubble = document.createElement('div');
         bubble.className = 'bg-floating-bubble';
         
-        const size = Math.random() * 150 + 50; 
+        const size = Math.random() * 200 + 80; 
         const left = Math.random() * 100;
-        const duration = Math.random() * 20 + 15; 
+        const duration = Math.random() * 25 + 15; 
         const delay = Math.random() * -20;
         const hue = Math.random() * 360;
 
@@ -55,6 +55,51 @@ function initBackgroundBubbles() {
         
         bgBubblesContainer.appendChild(bubble);
     }
+}
+
+function getSafePosition(scale, existingBubbles, xRange, yRange) {
+    const baseSizePx = window.innerWidth > 768 ? 130 : 70;
+    const radiusVw = ((baseSizePx * scale) / 2 / window.innerWidth) * 100;
+    const padding = 2; 
+
+    let bestX = 0;
+    let bestY = 0;
+    let success = false;
+    let attempts = 0;
+    const maxAttempts = 150;
+
+    const aspectRatio = window.innerWidth / window.innerHeight;
+
+    while (attempts < maxAttempts && !success) {
+        const tryX = (Math.random() * xRange) - (xRange / 2);
+        const tryY = (Math.random() * yRange) - (yRange / 2);
+        let collision = false;
+
+        for (const bubble of existingBubbles) {
+            const dx = tryX - bubble.x;
+            const dy = (tryY - bubble.y) * (1 / aspectRatio); 
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < (radiusVw + bubble.radius + padding)) {
+                collision = true;
+                break;
+            }
+        }
+
+        if (!collision) {
+            bestX = tryX;
+            bestY = tryY;
+            success = true;
+        }
+        attempts++;
+    }
+
+    if (!success) {
+        bestX = (Math.random() * xRange) - (xRange / 2);
+        bestY = (Math.random() * yRange) - (yRange / 2);
+    }
+
+    return { x: bestX, y: bestY, radius: radiusVw };
 }
 
 async function initGarden() {
@@ -121,6 +166,7 @@ async function initGarden() {
         if (genres && genres.length > 0) {
             genreContainer.innerHTML = ''; 
             const maxCount = Math.max(...genres.map(g => g.count));
+            let placedGenres = [];
             
             genres.forEach((g) => {
                 const bubble = document.createElement('a');
@@ -131,15 +177,15 @@ async function initGarden() {
                 const ratio = g.count / maxCount;
                 const scale = 1.3 + (ratio * 0.8);
                 
-                const xVal = (Math.random() * 50) - 25;
-                const yVal = (Math.random() * 30) - 15;
-                const delay = -(Math.random() * 10);
+                const pos = getSafePosition(scale, placedGenres, 60, 40);
+                placedGenres.push(pos);
                 
+                const delay = -(Math.random() * 10);
                 const borderColor = neonColors[g.name] || neonColors['default'];
 
                 bubble.style.setProperty('--scale', scale.toFixed(2));
-                bubble.style.setProperty('--x', `${xVal}vw`);
-                bubble.style.setProperty('--y', `${yVal}vh`);
+                bubble.style.setProperty('--x', `${pos.x}vw`);
+                bubble.style.setProperty('--y', `${pos.y}vh`);
                 bubble.style.setProperty('--border-glow', borderColor);
                 bubble.style.animationDelay = `${delay}s`;
                 bubble.classList.add('float3');
@@ -159,6 +205,7 @@ async function initGarden() {
 
         if (achievements && achievements.length > 0) {
             accomplishmentContainer.innerHTML = '';
+            let placedAch = [];
             
             achievements.forEach((ach) => {
                 const bubble = document.createElement('a');
@@ -168,13 +215,14 @@ async function initGarden() {
 
                 const scale = 1.0 + ((ach.percentage / 100) * 0.8);
                 
-                const xVal = (Math.random() * 50) - 25;
-                const yVal = (Math.random() * 30) - 15;
+                const pos = getSafePosition(scale, placedAch, 60, 40);
+                placedAch.push(pos);
+
                 const delay = -(Math.random() * 10);
 
                 bubble.style.setProperty('--scale', scale.toFixed(2));
-                bubble.style.setProperty('--x', `${xVal}vw`);
-                bubble.style.setProperty('--y', `${yVal}vh`);
+                bubble.style.setProperty('--x', `${pos.x}vw`);
+                bubble.style.setProperty('--y', `${pos.y}vh`);
                 bubble.style.animationDelay = `${delay}s`;
                 bubble.classList.add('float1');
 
