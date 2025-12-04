@@ -140,7 +140,7 @@ body{
 }
 
 .bubble{
-  --base: 90px; --scale: 1;
+  --base: 130px; --scale: 1;
   width: calc(var(--base) * var(--scale)); height: calc(var(--base) * var(--scale));
   position:absolute; left:50%; top:50%; --x:0; --y:0;
   transform:translate(calc(-50% + var(--x)), calc(-50% + var(--y)));
