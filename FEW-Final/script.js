@@ -32,9 +32,9 @@ async function initGarden() {
         const data = await response.json();
         const games = data.games;
         const genres = data.genres;
-        const isFallback = data.source === 'backup';
-
+        
         if (!games || games.length === 0) return;
+
 
         let maxPlaytime = Math.max(...games.map(g => g.playtime_forever)) || 1;
         const minGameScale = 0.8;
@@ -78,23 +78,19 @@ async function initGarden() {
             gameContainer.appendChild(bubble);
         });
 
+
         if (genres && genres.length > 0) {
             genreContainer.innerHTML = ''; 
             const maxCount = Math.max(...genres.map(g => g.count));
             
             genres.forEach((g) => {
-                
-                const bubble = document.createElement(isFallback ? 'div' : 'a');
-                
-                if (!isFallback) {
-                    bubble.href = `https://store.steampowered.com/genre/${g.name}`;
-                    bubble.target = "_blank";
-                }
-                
-                bubble.className = `bubble genre-bubble ${isFallback ? 'disabled' : ''}`;
+                const bubble = document.createElement('a');
+                bubble.href = `https://store.steampowered.com/genre/${g.name}`;
+                bubble.target = "_blank";
+                bubble.className = 'bubble genre-bubble';
 
                 const ratio = g.count / maxCount;
-                const scale = 0.9 + (ratio * 0.5);
+                const scale = 1.3 + (ratio * 0.8);
                 
                 const xVal = (Math.random() * 50) - 25;
                 const yVal = (Math.random() * 30) - 15;
@@ -106,14 +102,12 @@ async function initGarden() {
                 bubble.style.animationDelay = `${delay}s`;
                 bubble.classList.add('float3');
 
-
                 bubble.setAttribute('data-info', getGenreDesc(g.name));
 
                 if (g.sampleAppId) {
                     const bgUrl = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${g.sampleAppId}/header.jpg`;
                     bubble.style.backgroundImage = `url(${bgUrl})`;
                 }
-
 
                 bubble.innerHTML = `<span class="genre-text">${g.name}</span>`;
 

@@ -92,7 +92,7 @@ body{
 
 .cluster.compact {
     position: relative;
-    height: 350px;
+    height: 400px; /* Increased height for bigger bubbles */
     width: 100%;
 }
 
@@ -149,36 +149,33 @@ body{
 
 .bubble:hover img{ opacity:1; transform:scale(1.05); }
 
-/* Genre Bubble Styles */
+/* Genre Bubble Styles - BRIGHTER VERSION */
 .genre-bubble {
-    border: 3px solid #bf94ff;
-    /* Blend the image with purple */
-    background-blend-mode: multiply;
-    background-color: rgba(80, 40, 120, 0.7);
+    border: 3px solid #d6b3ff; /* Lighter Purple Border */
+    /* Remove 'multiply' to make it brighter */
+    background-blend-mode: normal; 
+    /* Use a lighter purple overlay */
+    background-color: rgba(80, 40, 120, 0.3);
 }
 
-.genre-bubble.disabled {
-    cursor: default;
-    border-color: #888;
-    filter: grayscale(0.5);
-}
-.genre-bubble.disabled:hover {
-    box-shadow: 0 0 15px rgba(150,150,150,0.5);
+.genre-bubble:hover {
+    border-color: white;
+    box-shadow: 0 0 25px #d6b3ff;
 }
 
 .genre-text {
-    font-size: 9px;
+    font-size: 10px; /* Slightly bigger text */
     color: white;
     text-align: center;
     text-shadow: 0 2px 4px black;
-    background: rgba(0,0,0,0.5);
-    padding: 4px 8px;
-    border-radius: 4px;
+    background: rgba(0,0,0,0.6);
+    padding: 6px 10px;
+    border-radius: 6px;
     pointer-events: none;
     z-index: 2;
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
-/* Tooltip */
 .bubble::after {
     content: attr(data-info);
     position: absolute;
