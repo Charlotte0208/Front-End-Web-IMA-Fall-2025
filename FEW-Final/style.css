@@ -16,7 +16,7 @@ body{
   font-family:'Press Start 2P',monospace;
   color:var(--text);
   overflow-x:hidden;
-  background-color: var(--bg-deep); 
+  background-color: var(--bg-deep);
 }
 
 .bg-gradient{
@@ -90,6 +90,22 @@ body{
     display: block; 
 }
 
+.cluster.compact {
+    position: relative;
+    height: 400px;
+    width: 100%;
+}
+
+.pixel-subtitle {
+  text-align: center;
+  color: #bf94ff;
+  font-size: 16px;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0px #4b0082;
+  letter-spacing: 2px;
+}
+
 .bubble{
   --base: 100px;
   --scale: 1;
@@ -122,12 +138,29 @@ body{
   transition: opacity .25s ease, transform .25s ease;
 }
 
+.genre-bubble {
+    border: 2px solid #bf94ff;
+    background: rgba(80, 40, 120, 0.6);
+    display: grid;
+    place-items: center;
+    padding: 5px;
+}
+
 .bubble:hover{
   z-index: 1000;
   background: hsla(var(--hue), 70%, 70%, 0.9);
   box-shadow: 0 0 30px rgba(160,120,255,0.6);
   animation-play-state: paused;
   transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.15);
+}
+
+.genre-bubble:hover {
+    background: #bf94ff;
+    color: black;
+}
+
+.genre-bubble:hover span {
+    color: black !important;
 }
 
 .bubble:hover img{ opacity:1; transform:scale(1.05); }
@@ -162,9 +195,15 @@ body{
   0%,100%{transform:translate(calc(-50% + var(--x)), calc(-50% + var(--y))) rotate(0deg)}
   50%{transform:translate(calc(-50% + var(--x) - 20px), calc(-50% + var(--y) + 20px)) rotate(-3deg)}
 }
+@keyframes kFloat3{
+  0%,100%{transform:translate(calc(-50% + var(--x)), calc(-50% + var(--y)))}
+  33%{transform:translate(calc(-50% + var(--x) + 12px), calc(-50% + var(--y) - 8px))}
+  66%{transform:translate(calc(-50% + var(--x) - 8px), calc(-50% + var(--y) + 12px))}
+}
 
 .float1{animation:kFloat1 12s ease-in-out infinite}
 .float2{animation:kFloat2 15s ease-in-out infinite}
+.float3{animation:kFloat3 12s ease-in-out infinite}
 
 .company-row{
   margin-top:20px;display:flex;justify-content:center;
