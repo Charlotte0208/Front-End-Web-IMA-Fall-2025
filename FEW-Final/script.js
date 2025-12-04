@@ -1,6 +1,7 @@
 const gameContainer = document.getElementById('game-container');
 const genreContainer = document.getElementById('genre-container');
 const accomplishmentContainer = document.getElementById('accomplishment-container');
+const bgBubblesContainer = document.getElementById('bg-floating-bubbles-container');
 
 const genreDescriptions = {
     "Action": "Adrenaline and fast reflexes.",
@@ -15,13 +16,50 @@ const genreDescriptions = {
     "Cyberpunk": "High tech, low life."
 };
 
+const neonColors = {
+    "Action": "#ff0055",     // Neon Red
+    "RPG": "#bc13fe",        // Neon Purple
+    "Indie": "#00f9ff",      // Neon Cyan
+    "Strategy": "#ff9900",   // Neon Orange
+    "Adventure": "#fff200",  // Neon Yellow
+    "Simulation": "#0066ff", // Neon Blue
+    "Casual": "#ff66cc",     // Neon Pink
+    "Puzzle": "#00ff99",     // Neon Mint
+    "default": "#bf94ff"     // Default light purple
+};
+
 function formatTime(minutes) {
     if (minutes === 0) return "Not played yet";
     if (minutes < 60) return `${minutes} mins`;
     return `${(minutes / 60).toFixed(1)} hrs`;
 }
 
+function initBackgroundBubbles() {
+    const bubbleCount = 15;
+    for (let i = 0; i < bubbleCount; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bg-floating-bubble';
+        
+        const size = Math.random() * 150 + 50; 
+        const left = Math.random() * 100;
+        const duration = Math.random() * 20 + 15; 
+        const delay = Math.random() * -20;
+        const hue = Math.random() * 360;
+
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        bubble.style.left = `${left}vw`;
+        bubble.style.animationDuration = `${duration}s`;
+        bubble.style.animationDelay = `${delay}s`;
+        bubble.style.setProperty('--bubble-hue', hue);
+        
+        bgBubblesContainer.appendChild(bubble);
+    }
+}
+
 async function initGarden() {
+    initBackgroundBubbles();
+
     try {
         const response = await fetch('/api/steam');
         if (!response.ok) throw new Error('Network error');
@@ -32,7 +70,6 @@ async function initGarden() {
         const achievements = data.achievements;
         
         if (!games || games.length === 0) return;
-
 
         let maxPlaytime = Math.max(...games.map(g => g.playtime_forever)) || 1;
         const minGameScale = 0.8;
@@ -56,10 +93,16 @@ async function initGarden() {
             const hue = Math.floor(Math.random() * 360);
             const delay = -(Math.random() * 15);
 
+            let borderColor = neonColors['default'];
+            if (game.primary_genre && neonColors[game.primary_genre]) {
+                borderColor = neonColors[game.primary_genre];
+            }
+
             bubble.style.setProperty('--scale', scale.toFixed(2));
             bubble.style.setProperty('--x', `${xVal}vw`);
             bubble.style.setProperty('--y', `${yVal}vh`);
             bubble.style.setProperty('--hue', hue);
+            bubble.style.setProperty('--border-glow', borderColor);
             bubble.style.animationDelay = `${delay}s`;
 
             bubble.setAttribute('data-info', `${game.name} • ${formatTime(game.playtime_forever)}`);
@@ -74,7 +117,6 @@ async function initGarden() {
             bubble.appendChild(img);
             gameContainer.appendChild(bubble);
         });
-
 
         if (genres && genres.length > 0) {
             genreContainer.innerHTML = ''; 
@@ -92,10 +134,13 @@ async function initGarden() {
                 const xVal = (Math.random() * 50) - 25;
                 const yVal = (Math.random() * 30) - 15;
                 const delay = -(Math.random() * 10);
+                
+                const borderColor = neonColors[g.name] || neonColors['default'];
 
                 bubble.style.setProperty('--scale', scale.toFixed(2));
                 bubble.style.setProperty('--x', `${xVal}vw`);
                 bubble.style.setProperty('--y', `${yVal}vh`);
+                bubble.style.setProperty('--border-glow', borderColor);
                 bubble.style.animationDelay = `${delay}s`;
                 bubble.classList.add('float3');
 
@@ -112,7 +157,6 @@ async function initGarden() {
             });
         }
 
-
         if (achievements && achievements.length > 0) {
             accomplishmentContainer.innerHTML = '';
             
@@ -121,7 +165,6 @@ async function initGarden() {
                 bubble.href = `https://steamcommunity.com/stats/${ach.appid}/achievements`;
                 bubble.target = "_blank";
                 bubble.className = 'bubble achievement-bubble';
-
 
                 const scale = 1.0 + ((ach.percentage / 100) * 0.8);
                 

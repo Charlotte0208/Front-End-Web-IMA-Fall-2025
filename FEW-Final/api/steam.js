@@ -14,8 +14,9 @@ export default async function handler(req, res) {
     let games = data.response.games || [];
 
     games.sort((a, b) => b.playtime_forever - a.playtime_forever);
-    const topGames = games.slice(0, 30);
-
+    
+    const topGames = games.slice(0, 35);
+    
     const fetchGenres = async () => {
         let genreCounts = {};
         let gameGenreMap = {};
@@ -31,10 +32,11 @@ export default async function handler(req, res) {
                 
                 if (storeData && storeData[game.appid] && storeData[game.appid].success) {
                     const genres = storeData[game.appid].data.genres;
-                    if (genres) {
-                        gameGenreMap[game.appid] = [];
+                    if (genres && genres.length > 0) {
+                        const primaryGenre = genres[0].description;
+                        gameGenreMap[game.appid] = primaryGenre;
+                        
                         genres.forEach(g => {
-                            gameGenreMap[game.appid].push(g.description);
                             genreCounts[g.description] = (genreCounts[g.description] || 0) + 1;
                         });
                     }
@@ -42,13 +44,20 @@ export default async function handler(req, res) {
             } catch (e) {}
         }
 
+        // Inject primary genre back into the main games list for coloring bubbles
+        games.forEach(game => {
+            if (gameGenreMap[game.appid]) {
+                game.primary_genre = gameGenreMap[game.appid];
+            }
+        });
+
         const sortedGenreKeys = Object.keys(genreCounts).sort((a, b) => genreCounts[b] - genreCounts[a]);
         let finalGenres = [];
         let usedGameIds = new Set();
 
         sortedGenreKeys.forEach(genreName => {
             const eligibleGames = topGames.filter(g => 
-                gameGenreMap[g.appid] && gameGenreMap[g.appid].includes(genreName)
+                gameGenreMap[g.appid] === genreName
             );
             let selectedGame = eligibleGames.find(g => !usedGameIds.has(g.appid)) || eligibleGames[0];
 
@@ -65,7 +74,7 @@ export default async function handler(req, res) {
         return finalGenres.slice(0, 6);
     };
 
-
+    // --- TASK 2: ACHIEVEMENTS ---
     const fetchAchievements = async () => {
         let achievementList = [];
         
@@ -94,7 +103,7 @@ export default async function handler(req, res) {
             } catch (e) {}
         }
         
-        return achievementList.sort((a, b) => b.percentage - a.percentage).slice(0, 10);
+        return achievementList.sort((a, b) => b.percentage - a.percentage).slice(0, 12);
     };
 
     const [genresResult, achievementsResult] = await Promise.all([fetchGenres(), fetchAchievements()]);
@@ -102,8 +111,8 @@ export default async function handler(req, res) {
     let source = 'api';
     if (genresResult.length === 0) {
         source = 'backup';
-
         genresResult.push({name: 'RPG', count: 5, sampleAppId: 632470});
+        genresResult.push({name: 'Action', count: 5, sampleAppId: 1091500});
         genresResult.push({name: 'Indie', count: 4, sampleAppId: 105600});
         genresResult.push({name: 'Adventure', count: 4, sampleAppId: 435120});
     }
