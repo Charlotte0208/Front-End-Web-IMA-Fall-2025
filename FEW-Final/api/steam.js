@@ -44,7 +44,6 @@ export default async function handler(req, res) {
             } catch (e) {}
         }
 
-        // Inject primary genre back into the main games list for coloring bubbles
         games.forEach(game => {
             if (gameGenreMap[game.appid]) {
                 game.primary_genre = gameGenreMap[game.appid];
@@ -74,7 +73,6 @@ export default async function handler(req, res) {
         return finalGenres.slice(0, 6);
     };
 
-    // --- TASK 2: ACHIEVEMENTS ---
     const fetchAchievements = async () => {
         let achievementList = [];
         
