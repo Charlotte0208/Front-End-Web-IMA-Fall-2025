@@ -67,6 +67,7 @@ async function initGarden() {
         });
 
         if (genres && genres.length > 0) {
+            genreContainer.innerHTML = ''; 
             const maxCount = Math.max(...genres.map(g => g.count));
             
             genres.forEach((g) => {
@@ -76,10 +77,10 @@ async function initGarden() {
                 bubble.className = 'bubble genre-bubble';
 
                 const ratio = g.count / maxCount;
-                const scale = 0.7 + (ratio * 0.6);
+                const scale = 0.8 + (ratio * 0.5);
                 
                 const xVal = (Math.random() * 50) - 25;
-                const yVal = (Math.random() * 40) - 20;
+                const yVal = (Math.random() * 30) - 15;
                 const hue = 250 + (Math.random() * 50); 
 
                 bubble.style.setProperty('--scale', scale.toFixed(2));
