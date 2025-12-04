@@ -1,25 +1,40 @@
 const gameContainer = document.getElementById('game-container');
 const genreContainer = document.getElementById('genre-container');
 
+const genreDescriptions = {
+    "Action": "Adrenaline and fast reflexes.",
+    "RPG": "Living another life, another story.",
+    "Indie": "Small teams, giant souls.",
+    "Strategy": "Planning the perfect victory.",
+    "Adventure": "Exploring the unknown.",
+    "Simulation": "Mimicking reality, but better.",
+    "Casual": "Relaxing vibes only.",
+    "Puzzle": "Brain teasers and logic.",
+    "Story Rich": "Narratives that touch the heart.",
+    "Cyberpunk": "High tech, low life."
+};
+
 function formatTime(minutes) {
     if (minutes === 0) return "Not played yet";
     if (minutes < 60) return `${minutes} mins`;
     return `${(minutes / 60).toFixed(1)} hrs`;
 }
 
+function getGenreDesc(name) {
+    return genreDescriptions[name] || `Exploring the world of ${name}.`;
+}
+
 async function initGarden() {
     try {
         const response = await fetch('/api/steam');
-        if (!response.ok) throw new Error('Network response was not ok');
+        if (!response.ok) throw new Error('Network error');
         
         const data = await response.json();
         const games = data.games;
         const genres = data.genres;
+        const isFallback = data.source === 'backup';
 
-        if (!games || games.length === 0) {
-            console.log("No games found.");
-            return;
-        }
+        if (!games || games.length === 0) return;
 
         let maxPlaytime = Math.max(...games.map(g => g.playtime_forever)) || 1;
         const minGameScale = 0.8;
@@ -31,8 +46,7 @@ async function initGarden() {
             bubble.target = "_blank";
             bubble.className = 'bubble game-bubble';
             
-            const randAnim = Math.random() > 0.5 ? 'float1' : 'float2';
-            bubble.classList.add(randAnim);
+            bubble.classList.add(Math.random() > 0.5 ? 'float1' : 'float2');
 
             let scale = minGameScale;
             if (game.playtime_forever > 0) {
@@ -58,9 +72,7 @@ async function initGarden() {
             const iconUrl = `https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`;
 
             img.src = headerUrl;
-            img.onerror = function() { 
-                if (this.src !== iconUrl) this.src = iconUrl; 
-            };
+            img.onerror = function() { if (this.src !== iconUrl) this.src = iconUrl; };
 
             bubble.appendChild(img);
             gameContainer.appendChild(bubble);
@@ -71,38 +83,46 @@ async function initGarden() {
             const maxCount = Math.max(...genres.map(g => g.count));
             
             genres.forEach((g) => {
-                const bubble = document.createElement('a');
-                bubble.href = `https://store.steampowered.com/genre/${g.name}`;
-                bubble.target = "_blank";
-                bubble.className = 'bubble genre-bubble';
+                
+                const bubble = document.createElement(isFallback ? 'div' : 'a');
+                
+                if (!isFallback) {
+                    bubble.href = `https://store.steampowered.com/genre/${g.name}`;
+                    bubble.target = "_blank";
+                }
+                
+                bubble.className = `bubble genre-bubble ${isFallback ? 'disabled' : ''}`;
 
                 const ratio = g.count / maxCount;
-                const scale = 0.8 + (ratio * 0.5);
+                const scale = 0.9 + (ratio * 0.5);
                 
                 const xVal = (Math.random() * 50) - 25;
                 const yVal = (Math.random() * 30) - 15;
-                const hue = 250 + (Math.random() * 50); 
+                const delay = -(Math.random() * 10);
 
                 bubble.style.setProperty('--scale', scale.toFixed(2));
                 bubble.style.setProperty('--x', `${xVal}vw`);
                 bubble.style.setProperty('--y', `${yVal}vh`);
-                bubble.style.setProperty('--hue', hue);
+                bubble.style.animationDelay = `${delay}s`;
                 bubble.classList.add('float3');
 
-                bubble.setAttribute('data-info', `${g.name} (${g.count} games)`);
-                
-                bubble.innerHTML = `<span style="font-size: 8px; color: white; text-align: center; pointer-events: none; padding:2px;">${g.name}</span>`;
+
+                bubble.setAttribute('data-info', getGenreDesc(g.name));
+
+                if (g.sampleAppId) {
+                    const bgUrl = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${g.sampleAppId}/header.jpg`;
+                    bubble.style.backgroundImage = `url(${bgUrl})`;
+                }
+
+
+                bubble.innerHTML = `<span class="genre-text">${g.name}</span>`;
 
                 genreContainer.appendChild(bubble);
             });
-        } else {
-             if (genreContainer) {
-                 genreContainer.innerHTML = '<p style="text-align:center; font-size:10px; color:#aaa; margin-top:50px;">(Genres unavailable due to Steam restrictions)</p>';
-             }
         }
 
     } catch (error) {
-        console.error("Failed to load data:", error);
+        console.error("Error:", error);
     }
 }
 
