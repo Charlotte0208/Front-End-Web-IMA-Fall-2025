@@ -17,15 +17,15 @@ const genreDescriptions = {
 };
 
 const neonColors = {
-    "Action": "#dd7296ff",     // Neon Red
-    "RPG": "#9b73abff",        // Neon Purple
-    "Indie": "#abe2f7ff",      // Neon Cyan
-    "Strategy": "#b49f81ff",   // Neon Orange
-    "Adventure": "#583d57ff",  // Neon Yellow
-    "Simulation": "#5b6d88ff", // Neon Blue
-    "Casual": "#715d6aff",     // Neon Pink
-    "Puzzle": "#4d4167ff",     // Neon Mint
-    "default": "#302147ff"     // Default light purple
+    "Action": "#dd7296ff", 
+    "RPG": "#9b73abff",
+    "Indie": "#abe2f7ff",
+    "Strategy": "#b49f81ff",
+    "Adventure": "#583d57ff",
+    "Simulation": "#5b6d88ff",
+    "Casual": "#715d6aff",
+    "Puzzle": "#4d4167ff",
+    "default": "#302147ff"
 };
 
 function formatTime(minutes) {
