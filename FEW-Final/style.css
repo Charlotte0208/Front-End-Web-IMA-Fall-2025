@@ -181,13 +181,13 @@ body{
 }
 
 .achievement-bubble {
-    --border-glow: #ffd700;
+    --border-glow: #7d7088;
     background-blend-mode: soft-light;
     background-color: rgba(60, 40, 0, 0.5);
 }
 .achievement-text {
-    font-size: 18px; font-weight: bold; color: #ffd700;
-    text-shadow: 2px 2px 0 #000, 0 0 10px rgba(255, 215, 0, 0.5);
+    font-size: 18px; font-weight: bold; color: #342848;
+    text-shadow: 2px 2px 0 #000, 0 0 10px rgba(141, 91, 199, 0.5);
     z-index: 2; pointer-events: none;
 }
 

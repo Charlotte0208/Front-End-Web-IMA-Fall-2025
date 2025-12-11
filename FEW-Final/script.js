@@ -19,12 +19,12 @@ const genreDescriptions = {
 const neonColors = {
     "Action": "#dd7296ff",     // Neon Red
     "RPG": "#9b73abff",        // Neon Purple
-    "Indie": "#abf6f7ff",      // Neon Cyan
+    "Indie": "#abe2f7ff",      // Neon Cyan
     "Strategy": "#b49f81ff",   // Neon Orange
-    "Adventure": "#fff980ff",  // Neon Yellow
-    "Simulation": "#b8c6dbff", // Neon Blue
+    "Adventure": "#583d57ff",  // Neon Yellow
+    "Simulation": "#5b6d88ff", // Neon Blue
     "Casual": "#715d6aff",     // Neon Pink
-    "Puzzle": "#1e533eff",     // Neon Mint
+    "Puzzle": "#4d4167ff",     // Neon Mint
     "default": "#302147ff"     // Default light purple
 };
 
