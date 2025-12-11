@@ -25,7 +25,7 @@ const neonColors = {
     "Simulation": "#5b6d88ff",
     "Casual": "#715d6aff",
     "Puzzle": "#4d4167ff",
-    "default": "#302147ff"
+    "default": "#bd9debff"
 };
 
 function formatTime(minutes) {
