@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coffee Playground</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1>Little Coffee Lab</h1>
+      <p class="subtitle">Build a drink card, brew it, and keep your board tidy.</p>
+    </div>
+    <div class="status" id="status" aria-live="polite">Ready.</div>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <h2>Create a drink</h2>
+
+      <form id="drinkForm" class="form">
+        <div class="row">
+          <label for="drinkName">Drink</label>
+          <input id="drinkName" name="drinkName" type="text" placeholder="Latte" required />
+        </div>
+
+        <div class="row">
+          <label for="roast">Roast</label>
+          <select id="roast" name="roast" required>
+            <option value="light">Light</option>
+            <option value="medium" selected>Medium</option>
+            <option value="dark">Dark</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label for="size">Size</label>
+          <select id="size" name="size" required>
+            <option value="S">Small</option>
+            <option value="M" selected>Medium</option>
+            <option value="L">Large</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label for="milk">Milk</label>
+          <select id="milk" name="milk" required>
+            <option value="whole" selected>Whole</option>
+            <option value="oat">Oat</option>
+            <option value="soy">Soy</option>
+            <option value="none">None</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label for="sweet">Sweetness</label>
+          <input id="sweet" name="sweet" type="range" min="0" max="5" value="2" />
+          <div class="hint" id="sweetHint">Sweetness: 2</div>
+        </div>
+
+        <button class="primary" type="submit">Add to board</button>
+      </form>
+
+      <div class="controls">
+        <div class="row">
+          <label for="filterRoast">Filter board</label>
+          <select id="filterRoast">
+            <option value="all" selected>All roasts</option>
+            <option value="light">Light only</option>
+            <option value="medium">Medium only</option>
+            <option value="dark">Dark only</option>
+          </select>
+        </div>
+
+        <button class="ghost" id="clearBtn" type="button">Clear board</button>
+      </div>
+
+      <div class="mini" id="summary"></div>
+    </section>
+
+    <section class="board">
+      <div class="boardHead">
+        <h2>Order board</h2>
+        <p class="subtitle">Click “Brew” on any card.</p>
+      </div>
+
+      <div id="cards" class="cards">
+        <coffee-card drink="Americano" roast="dark" size="M" milk="none" sweet="0"></coffee-card>
+        <coffee-card drink="Latte" roast="medium" size="L" milk="oat" sweet="2"></coffee-card>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="note">Submit both links: GitHub Repo URL and GitHub Pages URL.</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
